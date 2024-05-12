@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/6b38e01832ec4c7aa7a0b673f3b05221/artifacts
+end_time: 1715521706575
+entry_point_name: ''
+experiment_id: '562418837773692140'
+lifecycle_stage: active
+run_id: 6b38e01832ec4c7aa7a0b673f3b05221
+run_name: nimble-koi-240
+run_uuid: 6b38e01832ec4c7aa7a0b673f3b05221
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1715521440065
+status: 3
+tags: []
+user_id: burak
