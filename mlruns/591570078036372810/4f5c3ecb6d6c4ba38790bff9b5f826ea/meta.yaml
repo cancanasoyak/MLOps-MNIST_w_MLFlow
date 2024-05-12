@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/4f5c3ecb6d6c4ba38790bff9b5f826ea/artifacts
+end_time: 1715536621477
+entry_point_name: ''
+experiment_id: '591570078036372810'
+lifecycle_stage: active
+run_id: 4f5c3ecb6d6c4ba38790bff9b5f826ea
+run_name: glamorous-gnu-91
+run_uuid: 4f5c3ecb6d6c4ba38790bff9b5f826ea
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1715536476173
+status: 3
+tags: []
+user_id: burak

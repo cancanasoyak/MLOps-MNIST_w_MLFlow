@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/ccfd387315c14126a31d9a3643164117/artifacts
+end_time: 1715540301732
+entry_point_name: ''
+experiment_id: '111396308608927628'
+lifecycle_stage: active
+run_id: ccfd387315c14126a31d9a3643164117
+run_name: lightning_run_2
+run_uuid: ccfd387315c14126a31d9a3643164117
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1715540001958
+status: 3
+tags: []
+user_id: burak

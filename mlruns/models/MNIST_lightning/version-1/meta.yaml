@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1715537391195
+current_stage: None
+description: ''
+last_updated_timestamp: 1715537391195
+name: MNIST_lightning
+run_id: d5f68d9a527e4bcdb8bf050cfdf90227
+run_link: ''
+source: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/d5f68d9a527e4bcdb8bf050cfdf90227/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/d5f68d9a527e4bcdb8bf050cfdf90227/artifacts/model
+user_id: null
+version: 1

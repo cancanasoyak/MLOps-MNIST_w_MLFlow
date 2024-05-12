@@ -1,13 +1,10 @@
-import os
 import torch
 import tempfile
-import random as r
 import pandas as pd
 from tqdm import tqdm
 from matplotlib import pyplot as plt
 import mlflow
 from mlflow_utils import create_mlflow_experiment
-from mlflow.models.signature import infer_signature
 from hyperopt import hp, fmin, tpe, Trials
 from torch import nn
 from torch.utils.data import DataLoader
@@ -125,8 +122,6 @@ def train(model:nn.Module, device, train_loader, test_loader, criterion, optimiz
     Returns:
         None
     """
-    os.makedirs("models", exist_ok=True)
-    os.makedirs("results", exist_ok=True)
     model.to(device)
     train_loss = []
     train_acc = []
@@ -153,12 +148,12 @@ def train(model:nn.Module, device, train_loader, test_loader, criterion, optimiz
         mlflow.log_metric("val_acc", test_acc_epoch, step=epoch)
         
         if test_acc_epoch > best_acc:
-            torch.save(model.state_dict(), f"{output_dir}/best_acc_model.pth")
+            mlflow.log_artifact(f"{output_dir}/best_acc_model.pth")
             best_acc = test_acc_epoch
             best_acc_epoch = epoch + 1
             
         if test_loss_epoch < best_loss:
-            torch.save(model.state_dict(), f"{output_dir}/best_loss_model.pth")
+            mlflow.log_artifact(f"{output_dir}/best_loss_model.pth")
             best_loss = test_loss_epoch
             best_loss_epoch = epoch + 1
         general_stats = pd.DataFrame({
@@ -167,7 +162,6 @@ def train(model:nn.Module, device, train_loader, test_loader, criterion, optimiz
             "best_loss": [best_loss],
             "best_loss_epoch": [best_loss_epoch]
         })
-        general_stats.to_csv(f"{output_dir}/general_stats.csv")
     return general_stats, train_loss, train_acc, test_loss, test_acc
         
 def calculate_validation_accuracy(model:nn.Module, device, test_loader:DataLoader):
@@ -228,20 +222,22 @@ def objective(params):
     with mlflow.start_run(nested=True):
         mlflow.log_params(params)
 
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        train_loader = DataLoader(train_dataset, batch_size=params["batch_size"], shuffle=params["shuffle"])
-        test_loader = DataLoader(test_dataset, batch_size=params["batch_size"], shuffle=False)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            train_loader = DataLoader(train_dataset, batch_size=params["batch_size"], shuffle=params["shuffle"], num_workers=8 if device == "cuda" else 0, persistent_workers=True if device == "cuda" else False)
 
-        model = LeNet5()
-        model.to(device)
+            test_loader = DataLoader(test_dataset, batch_size=params["batch_size"], shuffle=False, num_workers=4 if device == "cuda" else 0, persistent_workers=True if device == "cuda" else False)
 
-        criterion = nn.CrossEntropyLoss()
-        optimizer = torch.optim.Adam(model.parameters(), lr=params["learning_rate"])
+            model = LeNet5()
+            model.to(device)
 
-        general_stats, train_loss, train_acc, test_loss, test_acc = train(model, device, train_loader, test_loader, criterion, optimizer, params["epochs"])
+            criterion = nn.CrossEntropyLoss()
+            optimizer = torch.optim.Adam(model.parameters(), lr=params["learning_rate"])
 
-        best_val_acc = general_stats["best_acc"].values[0]
-        mlflow.log_metric("val_acc", best_val_acc)
+            general_stats, train_loss, train_acc, test_loss, test_acc = train(model, device, train_loader, test_loader, criterion, optimizer, params["epochs"], output_dir=temp_dir)
+
+            best_val_acc = general_stats["best_acc"].values[0]
+            mlflow.log_metric("val_acc", best_val_acc)
         
 
     return -best_val_acc
@@ -255,7 +251,7 @@ def objective(params):
 if __name__ == "__main__":
         
     experiment_id = create_mlflow_experiment(
-        experiment_name="MNIST_hp",
+        experiment_name="MNIST_HP_tuning",
         artifact_location="data/mlflow_artifacts",
         tags={"env": "Dev", "framework": "PyTorch", "version": "1.0.0"}
         )

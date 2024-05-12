@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/30abebebc80147c397c12b6b881686e2/artifacts
+end_time: 1715537996594
+entry_point_name: ''
+experiment_id: '111396308608927628'
+lifecycle_stage: active
+run_id: 30abebebc80147c397c12b6b881686e2
+run_name: Prediction over random
+run_uuid: 30abebebc80147c397c12b6b881686e2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1715537995523
+status: 3
+tags: []
+user_id: burak

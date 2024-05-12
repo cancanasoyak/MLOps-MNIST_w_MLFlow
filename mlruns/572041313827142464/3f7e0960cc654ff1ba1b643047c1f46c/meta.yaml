@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts/3f7e0960cc654ff1ba1b643047c1f46c/artifacts
+end_time: 1715539196321
+entry_point_name: ''
+experiment_id: '572041313827142464'
+lifecycle_stage: active
+run_id: 3f7e0960cc654ff1ba1b643047c1f46c
+run_name: beautiful-ape-797
+run_uuid: 3f7e0960cc654ff1ba1b643047c1f46c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1715539108564
+status: 4
+tags: []
+user_id: burak

@@ -1,0 +1,6 @@
+artifact_location: file:///C:/Users/burak/OneDrive/Belgeler/GitHub/MLOps-MNIST_w_MLFlow/data/mlflow_artifacts
+creation_time: 1715539108055
+experiment_id: '572041313827142464'
+last_update_time: 1715539108055
+lifecycle_stage: active
+name: MNIST_HP_tuning

@@ -7,7 +7,6 @@ from tqdm import tqdm
 from matplotlib import pyplot as plt
 import mlflow
 from mlflow_utils import create_mlflow_experiment
-from mlflow.models.signature import infer_signature
 
 from torch import nn
 import torch.nn.functional as F
@@ -125,8 +124,7 @@ def train(model:nn.Module, device, train_loader, test_loader, criterion, optimiz
     Returns:
         None
     """
-    os.makedirs("models", exist_ok=True)
-    os.makedirs("results", exist_ok=True)
+    
     model.to(device)
     train_loss = []
     train_acc = []
@@ -230,7 +228,7 @@ if __name__ == "__main__":
         params = {
             "batch_size": 32,
             "shuffle": True,
-            "epochs": 5,
+            "epochs": 10,
             "learningRate": 0.0001,
             "device": device
         }
@@ -241,8 +239,8 @@ if __name__ == "__main__":
         random_num = r.randint(0, 10000)
         test_image, test_label = test_dataset[random_num]
 
-        train_loader = DataLoader(train_dataset, batch_size=params["batch_size"], shuffle=params["shuffle"])
-        test_loader = DataLoader(test_dataset, batch_size=params["batch_size"], shuffle=False)
+        train_loader = DataLoader(train_dataset, batch_size=params["batch_size"], shuffle=params["shuffle"], num_workers=4 if device == "cuda" else 0, persistent_workers=True if device == "cuda" else False)
+        test_loader = DataLoader(test_dataset, batch_size=params["batch_size"], shuffle=False, num_workers=2 if device == "cuda" else 0, persistent_workers=True if device == "cuda" else False)
 
         model = LeNet5()
         

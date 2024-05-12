@@ -162,7 +162,8 @@ class LightningMnistClassifier(L.LightningModule):
         self.optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         return self.optimizer
 
-    ############## Main function ##############
+
+
 
 def main():
     """
@@ -175,41 +176,26 @@ def main():
         )
     #mlflow.set_tracking_uri("http://localhost:5000")
     
-    with mlflow.start_run(experiment_id=experiment_id, run_name="lightning_run_2") as run:
+    with mlflow.start_run(experiment_id=experiment_id, run_name="Prediction over random") as run:
         params = {
-            "batch_size": 128,
-            "learning_rate": 0.0004,
-            "num_epochs": 50,
-            "num_workers": 8,
-            "num_images": 20
+            "num_images": 20,
+            "model_run_id": "d5f68d9a527e4bcdb8bf050cfdf90227"
         }
         
         mlflow.log_params(params)
         
-        # Create the data module
-        data_module = MNISTDataModule(batch_size=params["batch_size"], num_workers=params["num_workers"])
+        images = ImageFolder("data/testing", transform=transforms.Compose([
+            transforms.Grayscale(num_output_channels=1),
+            transforms.Resize((28, 28)),
+            transforms.ToTensor()
+            ]))
         
         # Create the model
-        model = LightningMnistClassifier(learning_rate=params["learning_rate"])
+        model = mlflow.pytorch.load_model(f"runs:/{params['model_run_id']}/model")
         
         mlflow.pytorch.autolog()
         # Create the trainer
-        trainer = L.Trainer(
-            max_epochs=params["num_epochs"],
-            callbacks=[EarlyStopping(monitor='val_loss'), ModelCheckpoint(monitor='val_loss')],
-            num_sanity_val_steps=0,
-            log_every_n_steps=200
-            )
-        
-        # Train the model
-        trainer.fit(model, data_module)
-        
-        # Test the model
-        trainer.test(model, data_module)
-        
-        # Save the model
-        mlflow.pytorch.log_model(model, "model")
-        
+
         
         rndm_numbers = torch.randint(0, 10000, (params["num_images"],))
         #select images and put them into the same figure
@@ -217,15 +203,15 @@ def main():
         nrows = (params["num_images"] + ncols - 1) // ncols
         fig, ax = plt.subplots(nrows, ncols, figsize=(ncols * 3, nrows * 3))
         for i, idx in enumerate(rndm_numbers):
-            img, label = data_module.dataset_test[idx]
+            img = images[idx][0]
+            label = images[idx][1]
             prediction = model(img.unsqueeze(0)).argmax().item()
             ax.ravel()[i].imshow(img.squeeze(), cmap='gray')
             ax.ravel()[i].set_title(f"Label: {label}, prediction: {prediction}")
             ax.ravel()[i].axis('off')
 
         mlflow.log_figure(fig, "predictions/random_predictions.png")
-        
-        
 
 if __name__ == "__main__":
     main()
+
