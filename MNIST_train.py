@@ -221,10 +221,20 @@ if __name__ == "__main__":
         )
     #mlflow.set_tracking_uri("http://localhost:5000")
     
-    with mlflow.start_run(experiment_id=experiment_id):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    params = {
+            "batch_size": 32,
+            "shuffle": True,
+            "epochs": 10,
+            "learningRate": 0.0001,
+            "device": device
+        }
+    
+    run_name = "MNIST_run_1"
+    
+    with mlflow.start_run(experiment_id=experiment_id, run_name=run_name) as run:
         
         
-        device = "cuda" if torch.cuda.is_available() else "cpu"
         params = {
             "batch_size": 32,
             "shuffle": True,

@@ -257,13 +257,15 @@ if __name__ == "__main__":
         )
     #mlflow.set_tracking_uri("http://localhost:5000")
     
-    with mlflow.start_run(experiment_id=experiment_id):
-        space = {
+    space = {
             "batch_size": hp.choice("batch_size", [8, 16, 32]),
             "shuffle": hp.choice("shuffle", [True]),
             "epochs": hp.choice("epochs", [2, 3, 4, 5]),
             "learning_rate": hp.loguniform("learning_rate", low=-6, high=-3)
         }
+    run_name = "HP_tuning_run_1"
+    
+    with mlflow.start_run(experiment_id=experiment_id, run_name=run_name):
         
         best = fmin(
             fn=objective,

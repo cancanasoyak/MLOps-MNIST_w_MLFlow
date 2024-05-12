@@ -175,14 +175,18 @@ def main():
         )
     #mlflow.set_tracking_uri("http://localhost:5000")
     
-    with mlflow.start_run(experiment_id=experiment_id, run_name="lightning_run_2") as run:
-        params = {
+    params = {
             "batch_size": 128,
             "learning_rate": 0.0004,
             "num_epochs": 50,
             "num_workers": 8,
             "num_images": 20
         }
+    run_name = "lightning_run_2"
+    
+    
+    with mlflow.start_run(experiment_id=experiment_id, run_name=run_name) as run:
+        
         
         mlflow.log_params(params)
         
