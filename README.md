@@ -1,10 +1,13 @@
 # MLOps-MNIST_w_MLFlow
 
-first to access the UI run:
+first unzip the data.zip file, the folder structure should be:
+    - ./data/testing
+    - ./data/training
+
+
+then to access the UI run:
 
     - mlflow ui
-
-
 
 There are 3 main codes:
 
